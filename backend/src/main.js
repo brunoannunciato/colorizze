@@ -69,6 +69,35 @@ app.get('/colors', (_, res) => {
     }
 })
 
+app.get('/colors/:id', (req, res) => {
+    try {
+        const id = req.params.id
+        const sql = `SELECT * FROM palette WHERE id = ${id}`
+    
+        pool.query(sql, (error, data) => {
+            if (error) throw error
+
+            const {id: palleteId, title, author} = data[0]
+            const sql = `SELECT * FROM color WHERE pallete_id = ${palleteId}`
+
+            pool.query(sql, (error, data) => {
+                if (error) throw error
+                
+                const colors = data.map(item => item.hex)
+                
+                const response = {
+                    title, author, palleteId, colors 
+                }
+                res.status(200).json({status: 200, data: response})
+            })
+
+
+        })
+    } catch (error) {
+        res.status(500).json({status: 500, message: "Ocorreu um problema ao procurar uma cor."})
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`app running at port: ${PORT}`)
 })
