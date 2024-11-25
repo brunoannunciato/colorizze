@@ -1,0 +1,8 @@
+.color-details:hover .color-details__menu {
+    transform: translateY(0);
+}
+
+.color-details__menu {
+    transform: translateY(36px);
+    transition: transform .3s ease;
+}
